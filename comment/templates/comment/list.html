@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Comentários{% endblock %}
+
+{% block content %}
+<h3>Comentários do Chamado: {{ ticket.titulo }}</h3>
+
+<ul class="list-group mt-3">
+    {% for comment in comments %}
+    <li class="list-group-item">
+        <strong>{{ comment.usuario.username }}</strong> — 
+        <small>{{ comment.data|date:"d/m/Y H:i" }}</small>
+        <p>{{ comment.texto }}</p>
+    </li>
+    {% empty %}
+    <li class="list-group-item text-muted">Nenhum comentário ainda.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
