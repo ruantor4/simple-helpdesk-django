@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% block title %}Detalhes do Ticket{% endblock %}
+{% block content %}
+<h2>{{ ticket.title }}</h2>
+<p><strong>Status:</strong> {{ ticket.status }}</p>
+<p><strong>Descrição:</strong> {{ ticket.description }}</p>
+<p><strong>Criado em:</strong> {{ ticket.created_at|date:"d/m/Y H:i" }}</p>
+<p><strong>Finalizado em:</strong> {{ ticket.finished_at|default:"—" }}</p>
+
+<hr>
+
+<h4>Comentários</h4>
+
+{% for comment in comments %}
+<div class="card mb-2">
+    <div class="card-body">
+        {% if comment.id == edit_comment_id %}
+            <!-- Edição rápida -->
+            <form method="post" action="{% url 'comment_update' comment.id %}">
+                {% csrf_token %}
+                <textarea name="text" class="form-control mb-2" rows="2" required>{{ comment.text }}</textarea>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success btn-sm">Salvar</button>
+                    <a href="{% url 'ticket_detail' ticket.id %}" class="btn btn-secondary btn-sm">Cancelar</a>
+                </div>
+            </form>
+        {% else %}
+            <p>{{ comment.text }}</p>
+            <small class="text-muted">{{ comment.created_at|date:"d/m/Y H:i" }}</small>
+            <div class="text-end">
+                <a href="{% url 'ticket_detail' ticket.id %}?edit={{ comment.id }}" class="btn btn-sm btn-warning">Editar</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<p class="text-muted">Nenhum comentário ainda.</p>
+{% endfor %}
+
+<hr>
+
+<h5>Adicionar Novo Comentário</h5>
+<form method="post" class="card p-3 shadow-sm">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Adicionar</button>
+    </div>
+</form>
+{% endblock %}

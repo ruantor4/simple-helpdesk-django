@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+{% block title %}Excluir Ticket{% endblock %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <h4>Tem certeza que deseja excluir o ticket <strong>{{ object.title }}</strong>?</h4>
+    <form method="post" class="mt-3">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirmar</button>
+        <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
