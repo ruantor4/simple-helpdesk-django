@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'core/base.html' %}
 {% block title %}Categorias{% endblock %}
 
 {% block content %}
 <h2>Categorias</h2>
-<a href="{% url 'category_create' %}" class="btn btn-primary mb-3">Nova Categoria</a>
+<a href="#" class="btn btn-primary mb-3">Nova Categoria</a>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -14,10 +14,11 @@
     <tbody>
         {% for category in categories %}
         <tr>
-            <td>{{ category.nome }}</td>
-            <td>{{ category.descricao }}</td>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 {% endblock %}
+
