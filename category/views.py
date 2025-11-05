@@ -137,15 +137,14 @@ class DeleteCategoryView(LoginRequiredMixin, View):
 
         except ObjectDoesNotExist:
             messages.error(request, "Categoria não encontrada.")
-            return redirect('category_list')
 
         except DatabaseError:
             messages.error(request, "Erro ao excluir a categoria.")
-            return redirect('category_list')
 
         except Exception as e:
-            messages.error(request, "Erro ao deletar categoria")
-            return redirect('category_list', category_id=category_id)
+            messages.error(request, f"Erro ao deletar categoria: {e}")
+
+        return redirect('category_list')
 
 
 

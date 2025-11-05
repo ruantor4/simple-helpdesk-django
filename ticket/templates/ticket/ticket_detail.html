@@ -16,12 +16,12 @@
     <div class="card-body">
         {% if comment.id == edit_comment_id %}
             <!-- Edição rápida -->
-            <form method="post" action="{% url 'comment_update' comment.id %}">
+            <form method="post" action="#}">
                 {% csrf_token %}
                 <textarea name="text" class="form-control mb-2" rows="2" required>{{ comment.text }}</textarea>
                 <div class="text-end">
                     <button type="submit" class="btn btn-success btn-sm">Salvar</button>
-                    <a href="{% url 'ticket_detail' ticket.id %}" class="btn btn-secondary btn-sm">Cancelar</a>
+                    <a href="#" class="btn btn-secondary btn-sm">Cancelar</a>
                 </div>
             </form>
         {% else %}
@@ -42,7 +42,9 @@
 <h5>Adicionar Novo Comentário</h5>
 <form method="post" class="card p-3 shadow-sm">
     {% csrf_token %}
-    {{ comment_form.as_p }}
+    <table class="table">
+
+    </table>
     <div class="text-end">
         <button type="submit" class="btn btn-success">Adicionar</button>
     </div>
