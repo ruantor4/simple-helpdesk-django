@@ -15,7 +15,7 @@ class HomeView(LoginRequiredMixin, View):
 
         except Exception as e:
             messages.error(request, "Erro ao carregar a pagina inicial")
-            return redirect('home')
+            return redirect('login')
 
 
 class LoginView(View):

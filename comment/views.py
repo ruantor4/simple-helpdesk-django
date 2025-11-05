@@ -12,9 +12,9 @@ from ticket.models import Ticket
 
 class CommentListView(LoginRequiredMixin, View):
 
-    def get(self, request: HttpRequest) -> HttpResponse:
+    def post(self, request: HttpRequest) -> HttpResponse:
         try:
-            comments = Comment.objects.all().order_by('-date')
+            comments = Comment.objects.all().select_for_update('user', 'ticket').all()
 
         except DatabaseError:
             messages.error(request, "Erro ao acessar o banco de dados")
@@ -37,6 +37,7 @@ class CreateCommentView(LoginRequiredMixin, View):
 
             if not text or text.strip() == '':
                 messages.error(request, "O comentário não pode ser vazio.")
+                return redirect('ticket_detail', ticket_id=ticket_id)
 
             Comment.objects.create(
                 text=text.strip(),
@@ -44,7 +45,6 @@ class CreateCommentView(LoginRequiredMixin, View):
                 ticket=ticket
             )
             messages.success(request, "Comentário adicionado com sucesso.")
-            return redirect('ticket-detail', ticket_id=ticket_id)
 
         except DatabaseError:
             messages.error(request, "Erro ao salvar comentário no banco de dados")
@@ -56,7 +56,7 @@ class CreateCommentView(LoginRequiredMixin, View):
 
 class UpdateCommentView(LoginRequiredMixin, View):
 
-    def get(self, request: HttpRequest, comment_id: int) -> HttpResponse:
+    def post(self, request: HttpRequest, comment_id: int) -> HttpResponse:
 
             comment = get_object_or_404(Comment, id=comment_id)
 
@@ -70,9 +70,9 @@ class UpdateCommentView(LoginRequiredMixin, View):
                 return redirect('ticket_detail', ticket_id=comment.ticket.id)
 
             try:
-                comment.text = new_text
+                comment.text = new_text.strip()
                 comment.save()
-                messages.warning("O comentário não pode estar vazio.")
+                messages.sucess("Comentario atualizado com sucesso.")
                 return redirect('ticket_detail', ticket_id=comment.ticket.id)
 
             except Exception as e:
@@ -81,7 +81,8 @@ class UpdateCommentView(LoginRequiredMixin, View):
             return redirect('ticket_detail', ticket_id=comment.ticket.id)
 
 class DeleteCommentView(LoginRequiredMixin, View):
-    def get(self, request: HttpRequest, comment_id: int) -> HttpResponse:
+
+    def post(self, request: HttpRequest, comment_id: int) -> HttpResponse:
         comment = get_object_or_404(Comment, id=comment_id)
 
         if comment.user != request.user:
@@ -91,6 +92,7 @@ class DeleteCommentView(LoginRequiredMixin, View):
         try:
             comment.delete()
             messages.success(request, "Comentários excluido com sucesso.")
+
         except Exception as e:
             messages.error(request, f"Erro ao excluir o comentário: {e}")
 
