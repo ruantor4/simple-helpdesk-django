@@ -4,19 +4,39 @@
 {% block content %}
 <h2>Usuários</h2>
 <table class="table table-striped mt-3">
+    <div class="mt-4 d-flex gap-2">
+        <a href="{% url 'create_user' %}">
+            <button class="btn btn-primary">Criar Usuário</button>
+        </a>
+        <a href="{% url 'home' %}">
+            <button class="btn btn-secondary">Voltar</button>
+        </a>
+    </div>
     <thead>
         <tr>
+            <th>Id</th>
             <th>Usuário</th>
             <th>Email</th>
-            <th>Tipo</th>
+            <th>Açõee</th>
+
         </tr>
     </thead>
     <tbody>
-        {% for user in users %}
+        {% for user in userObj %}
         <tr>
+            <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.tipo_usuario }}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a href="{% url 'update_user' user.id %}">
+                        <button type="button" class="btn btn-primary btn-sm me-2">Editar</button>
+                    </a>
+                    <a href="{% url 'delete_user' user.id %}">
+                        <button type="button" class="btn btn-danger btn-sm md-2">Excluir</button>
+                    </a>
+                </div>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
